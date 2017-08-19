@@ -29,6 +29,10 @@ func isZeroVal(val reflect.Value) bool {
 	return reflect.DeepEqual(val.Interface(), z)
 }
 
+func isIgnored(sf reflect.StructField) bool {
+	return sf.Tag.Get("pretty") == "ignore"
+}
+
 func (c *Config) val2node(val reflect.Value) node {
 	// TODO(kevlar): pointer tracking?
 
@@ -86,6 +90,9 @@ func (c *Config) val2node(val reflect.Value) node {
 		for i := 0; i < fields; i++ {
 			sf := typ.Field(i)
 			if !c.IncludeUnexported && sf.PkgPath != "" {
+				continue
+			}
+			if c.SkipIgnoredFields && isIgnored(sf) {
 				continue
 			}
 			field := val.Field(i)

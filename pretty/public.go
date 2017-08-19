@@ -39,6 +39,7 @@ type Config struct {
 	PrintStringers      bool // Call String on a fmt.Stringer
 	PrintTextMarshalers bool // Call MarshalText on an encoding.TextMarshaler
 	SkipZeroFields      bool // Skip struct fields that have a zero value.
+	SkipIgnoredFields   bool // Skip struct fields with a "pretty" tag of "ignore"
 
 	// Output transforms
 	ShortList int // Maximum character length for short lists if nonzero.
@@ -81,12 +82,14 @@ var (
 	CompareConfig = &Config{
 		Diffable:          true,
 		IncludeUnexported: true,
+		SkipIgnoredFields: true,
 		Formatter:         DefaultFormatter,
 	}
 
 	// DefaultConfig is the default configuration used for all other top-level functions.
 	DefaultConfig = &Config{
-		Formatter: DefaultFormatter,
+		Formatter:         DefaultFormatter,
+		SkipIgnoredFields: true,
 	}
 )
 

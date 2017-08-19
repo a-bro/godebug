@@ -75,9 +75,9 @@ func TestVal2nodeDefault(t *testing.T) {
 		{
 			desc: "map of [2]int",
 			raw: map[[2]int]string{
-				[2]int{-1, 2}: "school",
-				[2]int{0, 0}:  "origin",
-				[2]int{1, 3}:  "home",
+				{-1, 2}: "school",
+				{0, 0}:  "origin",
+				{1, 3}:  "home",
 			},
 			want: keyvals{
 				{"[-1,2]", stringVal("school")},
@@ -153,6 +153,17 @@ func TestVal2node(t *testing.T) {
 				{"Zaphod", stringVal("beeblebrox")},
 				{"Ford", stringVal("prefect")},
 				{"foo", stringVal("GOOD")},
+			},
+		},
+		{
+			desc: "struct w/ Ignored Fields",
+			raw: struct {
+				Zaphod string
+				Ford   string `pretty:"ignore"`
+			}{"beeblebrox", "prefect"},
+			cfg: DefaultConfig,
+			want: keyvals{
+				{"Zaphod", stringVal("beeblebrox")},
 			},
 		},
 		{
